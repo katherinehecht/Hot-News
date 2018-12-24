@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="/fire.png"/>
+
+    <title>Hot News</title>
+</head>
+
+<body style="background-color:#DDD; position: relative;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="/khecht/paradigms/fire.png" width="30" height="30" class="d-inline-block align-top mx-2" alt="fire.png">
+            Hot News
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="floodFill.html">Home </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="upload_article.html">Content Managment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view_articles.html">View Articles</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h1 class="text-center"> Content Management </h1>
+    <div class="row my-2">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <h3 class="text-center"><b> Upload </b></h3>
+            <div class="alert alert-primary text-center" role="alert">
+                <form>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input class="form-control" id="uploadTitle">
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlInput1">Source</label>
+                        <input class="form-control" id="uploadSource">
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlInput1">Link</label>
+                        <input class="form-control" id="uploadLink">
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlInput1">Keywords (separated by commas)</label>
+                        <input class="form-control" id="uploadKeywords">
+                    </div>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlTextarea1">Content</label>
+                        <textarea class="form-control" id="uploadContent" rows="3"></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-success text-center" id="submitArticleButton">Submit</button>
+
+                    <button type="button" class="btn btn-success text-center" id="addToQueue">Add Article to Queue</button>
+                    <button type="button" class="btn btn-success text-center" id="addAllArticles">Add All Articles</button>
+                    <!-- <button type="button" class="btn btn-success text-center" id="viewSingle">View Single Article</button>
+                    <button type="button" class="btn btn-success text-center" id="viewAllArticles">View All Articles</button> -->
+                </form>
+                <p id="uploadResult"></p>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+    <div class="row my-2">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <h3 class="text-center"><b> Delete </b></h3>
+            <div class="alert alert-primary text-center" role="alert">
+                <form>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input type="email" class="form-control" id="deleteUploadTitle">
+                    </div>
+                    <button type="button" class="btn btn-success text-center" id="deleteArticleButton">Delete Article</button>
+                    <button type="button" class="btn btn-success text-center" id="deleteAllArticlesButton">Delete All User Articles</button>
+                </form>
+                <p class="text-center" id="deleteResult"></p>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="json2.js"></script>
+    <script>
+
+
+    $("#deleteAllArticlesButton").click(function() {
+        var delete_all = new XMLHttpRequest();
+        delete_all.open("DELETE", "http://student04.cse.nd.edu:52071/userArticles/");
+        delete_all.onload = function(e) {
+            var response = JSON.parse(delete_all.responseText);
+            console.log(response);
+            document.getElementById("deleteResult").innerHTML = "All articles deleted!";
+            setTimeout(function(){
+                document.getElementById("deleteResult").innerHTML = "";
+            }, 1750);
+        }
+        delete_all.send(null);
+        document.getElementById("uploadTitle").value='';
+        document.getElementById("uploadSource").value='';
+        document.getElementById("uploadLink").value='';
+        document.getElementById("uploadKeywords").value='';
+        document.getElementById("uploadContent").value='';
+
+    });
+
+    $("#deleteArticleButton").click(function() {
+        let title = document.getElementById("deleteUploadTitle").value;
+        var delete_title = new XMLHttpRequest();
+        delete_title.open("DELETE", "http://student04.cse.nd.edu:52071/userArticles/" + title);
+        delete_title.onload = function(e) {
+            var response = JSON.parse(delete_title.responseText);
+            console.log(response);
+            document.getElementById("deleteResult").innerHTML = "Article deleted!";
+            setTimeout(function(){
+                document.getElementById("deleteResult").innerHTML = "";
+            }, 1750);
+        }
+        delete_title.send(null);
+        document.getElementById("uploadTitle").value='';
+        document.getElementById("uploadSource").value='';
+        document.getElementById("uploadLink").value='';
+        document.getElementById("uploadKeywords").value='';
+        document.getElementById("uploadContent").value='';
+
+    });
+
+    $("#submitArticleButton").click(function() {
+        let title = document.getElementById("uploadTitle").value;
+        let source = document.getElementById("uploadSource").value;
+        let link = document.getElementById("uploadLink").value;
+        let keywords = document.getElementById("uploadKeywords").value.split(", ");
+        console.log("KEYWORDS");
+        console.log(keywords);
+        let content = document.getElementById("uploadContent").value;
+        var today = new Date()
+        let dd = today.getDate();
+        let mm = today.getMonth()+1; //January is 0!
+        let yyyy = today.getFullYear();
+
+        if(dd<10) {
+            dd = '0'+dd
+        }
+
+        if(mm<10) {
+            mm = '0'+mm
+        }
+
+        today = yyyy + '-' + mm + '-' + dd;
+
+        var put_data = {
+            'source' : source,
+            'link' : link,
+            'keywords' : keywords,
+            'content' : content,
+            'date' : today
+        };
+        var json = JSON.stringify(put_data);
+        var put_article = new XMLHttpRequest();
+        put_article.open("PUT", "http://student04.cse.nd.edu:52071/userArticles/" + title);
+        put_article.onload = function(e) {
+            var response = JSON.parse(put_article.responseText);
+            console.log(response);
+            document.getElementById("uploadResult").innerHTML = "Article submitted!";
+            setTimeout(function(){
+                document.getElementById("uploadResult").innerHTML = "";
+            }, 1750);
+        };
+        put_article.send(json);
+        console.log(title);
+        console.log(source);
+        console.log(link);
+        console.log(keywords);
+        console.log(content);
+        document.getElementById("uploadTitle").value='';
+        document.getElementById("uploadSource").value='';
+        document.getElementById("uploadLink").value='';
+        document.getElementById("uploadKeywords").value='';
+        document.getElementById("uploadContent").value='';
+
+    });
+
+    var queue = []
+    $("#addToQueue").click(function() {
+        let title = document.getElementById("uploadTitle").value;
+        let source = document.getElementById("uploadSource").value;
+        let link = document.getElementById("uploadLink").value;
+        let keywords = document.getElementById("uploadKeywords").value.split(", ");
+        let content = document.getElementById("uploadContent").value;
+        var today = new Date()
+        let dd = today.getDate();
+        let mm = today.getMonth()+1; //January is 0!
+        let yyyy = today.getFullYear();
+
+        if(dd<10) {
+            dd = '0'+dd
+        }
+
+        if(mm<10) {
+            mm = '0'+mm
+        }
+
+        today = yyyy + '-' + mm + '-' + dd;
+        var article = {
+            'title' : title,
+            'source' : source,
+            'link' : link,
+            'keywords' : keywords,
+            'content' : content,
+            'date' : today
+        };
+        queue.push(article);
+        console.log('added')
+        document.getElementById("uploadTitle").value='';
+        document.getElementById("uploadSource").value='';
+        document.getElementById("uploadLink").value='';
+        document.getElementById("uploadKeywords").value='';
+        document.getElementById("uploadContent").value='';
+        document.getElementById("uploadResult").innerHTML = "Article added to queue!";
+        setTimeout(function(){
+            document.getElementById("uploadResult").innerHTML = "";
+        }, 1750);
+
+    });
+
+    $("#addAllArticles").click(function() {
+        console.log(queue)
+        var post_articles = new XMLHttpRequest();
+        post_articles.open("POST", "http://student04.cse.nd.edu:52071/userArticles/");
+        post_articles.onload = function(e) {
+            var response = JSON.parse(post_articles.responseText);
+            console.log(response);
+        };
+        var json = JSON.stringify(queue);
+        post_articles.send(json);
+        queue = []
+        document.getElementById("uploadTitle").value='';
+        document.getElementById("uploadSource").value='';
+        document.getElementById("uploadLink").value='';
+        document.getElementById("uploadKeywords").value='';
+        document.getElementById("uploadContent").value='';
+        document.getElementById("uploadResult").innerHTML = "All articles submitted!";
+        setTimeout(function(){
+            document.getElementById("uploadResult").innerHTML = "";
+        }, 1750);
+
+    });
+
+
+    </script>
+
+</body>
+
+<html>

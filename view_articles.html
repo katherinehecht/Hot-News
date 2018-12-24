@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="/fire.png"/>
+
+    <title>Hot News</title>
+</head>
+
+<body style="background-color:#DDD; position: relative;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="/khecht/paradigms/fire.png" width="30" height="30" class="d-inline-block align-top mx-2" alt="fire.png">
+            Hot News
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="floodFill.html">Home </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="upload_article.html">Content Managment</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="view_articles.html">View Articles</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h1 class="text-center"> View Articles </h1>
+
+    <div class="row my-2">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <div class="alert alert-primary text-center" role="alert">
+                <form>
+                    <div class="form-group text-left">
+                        <label for="exampleFormControlInput1">Title</label>
+                        <input class="form-control" id="uploadTitle">
+                    </div>
+                    <button type="button" class="btn btn-success text-center" id="viewSingle">View Single Article</button>
+                    <button type="button" class="btn btn-success text-center" id="viewAllArticles">View All Articles</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+    <div class="row my-2 text-center">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10" id="articleDiv"></div>
+        <div class="col-lg-1"></div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="json2.js"></script>
+    <script>
+
+    let generateArticleCard = function(t, d, k, l, s, c) {
+        let ret = `<div class="card">
+                        <div class="card-header"> `
+                            + t +
+                            `
+                        </div>
+                        <div class="card-body text-left">
+                            <h6 class="card-subtitle mb-2 text-muted"> Date: ` + d.substring(0, 10) + `<br>  By: ` + s + `</h6>
+                            <p class="card-text">` + c + `</p>
+                            <a href="` + l + `" class="card-link"> <button class="btn btn-primary">` + l + `</button></a>
+                        </div>
+                        <div class="card-footer text-muted"> Keywords: ` + k + `
+
+                        </div>
+                   </div>`;
+        return ret;
+    }
+
+
+    $("#viewSingle").click(function(){
+        document.getElementById("articleDiv").innerHTML = "";
+        var view_one = new XMLHttpRequest();
+        let title = document.getElementById("uploadTitle").value;
+        view_one.open("GET", "http://student04.cse.nd.edu:52071/userArticles/" + title);
+        view_one.onload = function(e) {
+            var response = JSON.parse(view_one.responseText);
+            console.log(response);
+
+            let articleTitle = (response["article"]["title"]);
+            let articleDate = (response["article"]["date"]);
+            let articleKeywords = (response["article"]["keywords"]);
+            let articleLink = (response["article"]["link"]);
+            let articleSource = (response["article"]["source"]);
+            let articleContent = (response["article"]["content"]);
+            document.getElementById("articleDiv").innerHTML = generateArticleCard(articleTitle, articleDate, articleKeywords, articleLink, articleSource, articleContent);
+        }
+        view_one.send(null);
+        document.getElementById("uploadTitle").value='';
+    });
+
+    $("#viewAllArticles").click(function(){
+        document.getElementById("articleDiv").innerHTML = "";
+        var view_all = new XMLHttpRequest();
+        view_all.open("GET", "http://student04.cse.nd.edu:52071/userArticles/");
+        view_all.onload = function(e) {
+            let response = JSON.parse(view_all.responseText);
+            console.log(response);
+            for (let i = 0; i < response["articles"].length; i++) {
+                let articleTitle = (response["articles"][i]["title"]);
+                let articleDate = (response["articles"][i]["date"]);
+                let articleKeywords = (response["articles"][i]["keywords"]);
+                let articleLink = (response["articles"][i]["link"]);
+                let articleSource = (response["articles"][i]["source"]);
+                let articleContent = (response["articles"][i]["content"]);
+                console.log(articleContent);
+
+                document.getElementById("articleDiv").innerHTML += generateArticleCard(articleTitle, articleDate, articleKeywords, articleLink, articleSource, articleContent) + " <br>";
+            }
+        }
+        view_all.send(null);
+        document.getElementById("uploadTitle").value='';
+    });
+
+    </script>
+</body>
+
+<html>

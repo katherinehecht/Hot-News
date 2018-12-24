@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="shortcut icon" type="image/png" href="/khecht/paradigms/fire.png"/>
+
+    <title>Hot News</title>
+</head>
+
+<body style="background-color:#DDD; position: relative;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="/khecht/paradigms/fire.png" width="30" height="30" class="d-inline-block align-top mx-2" alt="fire.png">
+            Hot News
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="floodFill.html">Home </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="upload_article.html">Content Managment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="view_articles.html">View Articles</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="row my-3">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10 text-center">
+            <span class="mx-1"> Low </span>
+            <canvas id="gradientCanvas" width="900" height="15" style="border:1px solid #d3d3d3;">
+                Your browser does not support the HTML5 canvas tag.</canvas>
+                <span class="mx-1"> High</span>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+    <div class="row my-3 text-center" >
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8 text-center" id="userQuery">
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+
+
+
+    <div class="row my-3" id="dateForm" hidden>
+        <div class="col-lg-5"></div>
+        <div class="col-lg-2 text-center">
+            <form>
+                <div class="form-group">
+                    <label for="formControlRange">Date</label>
+                    <input type="range" class="form-control-range" min="0" max="0" value="0" id="dateSlider">
+                </div>
+            </form>
+            <p id="dateSliderDisplay"> </p>
+        </div>
+        <div class="col-lg-5"></div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10 text-center">
+            <canvas id="myCanvas" width="1040" height="663" class="text-center" style="border:1px solid #d3d3d3;">
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <div id="loadingDiv">
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4 text-center">
+            <label for="exampleFormControlSelect1" class="text-center">Keywords</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="keywordInput" placeholder="Enter Keywords" aria-label="Enter Keywords" aria-describedby="goButton">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button" id="goButton">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+
+
+
+
+    <!-- <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-2">
+            <div class="form-group text-center">
+                <label for="exampleFormControlSelect1" class="text-center">Start Date</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>November 18, 2018</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group text-center">
+                <label for="exampleFormControlSelect1" class="text-center">End Date</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>November 19, 2018</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div> -->
+
+
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <div class="form-group text-center">
+            <label for="exampleFormControlSelect1" class="text-center">Mode</label>
+                <select class="form-control" id="modeInput">
+                    <option>News Sites</option>
+                    <option>Uploaded Content</option>
+                    <option>Both</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4 text-center">
+            <label for="example-date-input" class="col-2 col-form-label text-center">Date</label>
+            <input class="form-control" type="date" value="2018-11-27" id="dateInput">
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+    <div class="row my-3 text-center" >
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8 text-center" id="errorLog">
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4" class="text-center">
+        <div class="form-group" class="text-center">
+            <label for="exampleFormControlSelect1" class="text-center">Day previous</label>
+            <select class="form-control" id="previousInput">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+        </div>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+
+    <hr>
+
+    <p class="text-black text-center"> Project by
+        <a href="mailto:jhill9@nd.edu">Jack Hill</a>,
+        <a href="mailto:khecht@nd.edu">Katherine Hecht</a>, and
+        <a href="mailto:rstefani@nd.edu">Richard Stefanik </a>
+    </p>
+    <p class="text-black text-center"> Created using <a href="https://newsapi.org"> NewsAPI </a> </p>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="json2.js"></script>
+    <script>
+
+    let allStatesForCall = [];
+    let allLinksForCall = [];
+    let allDatesForCall = [];
+
+
+
+    //The following two functions have been taken from https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string
+    let extractHostname = function(url) {
+        var hostname;
+        //find & remove protocol (http, ftp, etc.) and get hostname
+
+        if (url.indexOf("//") > -1) {
+            hostname = url.split('/')[2];
+        }
+        else {
+            hostname = url.split('/')[0];
+        }
+
+        //find & remove port number
+        hostname = hostname.split(':')[0];
+        //find & remove "?"
+        hostname = hostname.split('?')[0];
+        return hostname;
+    }
+
+    let extractRootDomain = function(url) {
+        var domain = extractHostname(url),
+            splitArr = domain.split('.'),
+            arrLen = splitArr.length;
+
+        //extracting the root domain here
+        //if there is a subdomain
+        if (arrLen > 2) {
+            domain = splitArr[arrLen - 2] + '.' + splitArr[arrLen - 1];
+            //check to see if it's using a Country Code Top Level Domain (ccTLD) (i.e. ".me.uk")
+            if (splitArr[arrLen - 2].length == 2 && splitArr[arrLen - 1].length == 2) {
+                //this is using a ccTLD
+                domain = splitArr[arrLen - 3] + '.' + domain;
+            }
+        }
+        return domain;
+    };
+    //console.log(extractRootDomain("http://www.youtube.com/watch?v=ClkQA2Lb_iE"));
+
+    let updateSliderDisplay;
+
+    let number_map = function(value, fromLow, fromHigh, toLow, toHigh) {
+        return toLow + (toHigh - toLow) * (value - fromLow) / (fromHigh - fromLow);
+    }
+
+    let stateNames = ["Oregon", "Washington", "Idaho", "Nevada",
+    "Montana", "Utah", "Arizona", "New Mexico", "Colorado", "Wyoming", "Texas",
+    "Oklahoma", "Kansas", "Nebraska", "South Dakota", "North Dakota", "Louisiana",
+    "Arkansas", "Missouri", "Iowa", "Minnesota", "Wisconsin", "Illinois",
+    "Mississippi", "Alabama", "Tennessee", "Kentucky", "Indiana", "Michigan", "Ohio",
+    "West Virginia", "Virginia", "North Carolina", "South Carolina", "Georgia",
+    "Florida", "Maryland", "Deleware", "New Jersey",
+    "Pennsylvania", "Connecticut", "Rhode Island", "Massachusetts",
+    "Vermont", "New Hampshire", "Maine", "California", "New York"];
+
+    let stateLinks = {};
+
+    let stateRequest;
+    let c = document.getElementById("myCanvas");
+    let ctx = c.getContext("2d");
+
+    let width = c.width;
+    let height = c.height;
+
+    let base_image = new Image();
+    //base_image.crossOrigin = "Anonymous";
+    base_image.src = 'http://student04.cse.nd.edu/khecht/paradigms/map.jpg';
+    base_image.onload = function(){
+        ctx.drawImage(base_image, 0, 0);
+        let cleanedMap = ctx.getImageData(0, 0, width, height);
+        for (let i = 0; i < cleanedMap.data.length; i +=4) {
+            if ((cleanedMap.data[i] > 150) && (cleanedMap.data[i + 1] > 150) && (cleanedMap.data[i + 2] > 150)) {
+                cleanedMap.data[i] = 255;
+                cleanedMap.data[i + 1] = 255;
+                cleanedMap.data[i + 2] = 255;
+                cleanedMap.data[i + 3] = 255;
+            }
+            else {
+                cleanedMap.data[i] = 0;
+                cleanedMap.data[i + 1] = 0;
+                cleanedMap.data[i + 2] = 0;
+                cleanedMap.data[i + 3] = 255;
+            }
+        }
+        ctx.putImageData(cleanedMap, 0, 0);
+        //fillStates(s);
+    }
+    let allStateLocs = null;
+
+    const workerScript = `
+    let fillWrapper = function(cursorW, newColorW, imgDataW, dimensions, states) {
+        console.log("In fill");
+        //console.log(states);
+        //console.log(states)
+        let width = dimensions[0];
+        let height = dimensions[1];
+
+        let number_map = function(value, fromLow, fromHigh, toLow, toHigh) {
+            return toLow + (toHigh - toLow) * (value - fromLow) / (fromHigh - fromLow);
+        }
+
+        let getMax = function(arr) {
+            let max = arr[0]
+            for (let i = 1; i < arr.length; i++) {
+                if (arr[i] > max) {
+                    max = arr[i]
+                }
+            }
+            return max;
+        }
+
+        let getMin = function(arr) {
+            let min = arr[0]
+            for (let i = 1; i < arr.length; i++) {
+                if (arr[i] < min) {
+                    min = arr[i]
+                }
+            }
+            return min;
+        }
+
+        let getArrayPos = function(first, second) {
+            return ((second * width) + first) * 4;
+        };
+
+        /*let states = {"Oregon": 5, "Washington": 2, "Idaho": 12, "Nevada": 4,
+        "Montana": 2, "Utah": 3, "Arizona": 23, "New Mexico": 20, "Colorado": 14, "Wyoming": 10, "Texas": 50,
+        "Oklahoma": 14, "Kansas": 21, "Nebraska": 20, "South Dakota": 2, "North Dakota": 11, "Louisiana": 3,
+        "Arkansas": 23, "Missouri": 13, "Iowa": 19, "Minnesota": 17, "Wisconsin": 12, "Illinois": 32,
+        "Mississippi": 12, "Alabama": 3, "Tennessee": 12, "Kentucky": 14, "Indiana": 5, "Michigan": 4, "Ohio": 12,
+        "West Virginia": 2, "Virginia": 3, "North Carolina": 32, "South Carolina": 35, "Georgia": 21,
+        "Florida": 25, "Maryland": 20, "Deleware": 19, "New Jersey": 40,
+        "Pennsylvania": 23, "Connecticut": 13, "Rhode Island": 18, "Massachusetts": 26,
+        "Vermont": 6, "New Hampshire": 9, "Maine": 40, "California": 50, "New York": 20};*/
+
+        let locs = {"California": [getArrayPos(90, 337)], "New York": [getArrayPos(916, 173)],
+        "Oregon": [getArrayPos(111, 170)], "Washington": [getArrayPos(137, 68)], "Idaho": [getArrayPos(211, 189)],
+        "Nevada": [getArrayPos(155, 280)], "Montana": [getArrayPos(276, 101)], "Utah": [getArrayPos(238, 320)], "Arizona": [getArrayPos(227, 446)],
+        "New Mexico": [getArrayPos(311, 428)], "Colorado": [getArrayPos(332, 330)], "Wyoming": [getArrayPos(322, 230)],
+        "Texas": [getArrayPos(466, 507)], "Oklahoma": [getArrayPos(492, 398)], "Kansas": [getArrayPos(483, 330)],
+        "Nebraska": [getArrayPos(469, 264)], "South Dakota": [getArrayPos(454, 199)], "North Dakota": [getArrayPos(467, 97)],
+        "Louisiana": [getArrayPos(606, 504)], "Arkansas": [getArrayPos(606, 421)], "Missouri": [getArrayPos(616, 351)], "Iowa": [getArrayPos(587, 258)],
+        "Minnesota": [getArrayPos(552, 152)], "Wisconsin": [getArrayPos(644, 183)], "Illinois": [getArrayPos(673, 289)],
+        "Mississippi": [getArrayPos(671, 468)], "Alabama": [getArrayPos(725, 465)],
+        "Tennessee": [getArrayPos(724, 397)], "Kentucky": [getArrayPos(723, 334)], "Indiana": [getArrayPos(732, 275)],
+        "Michigan": [getArrayPos(737, 181), getArrayPos(678, 123)], "Ohio": [getArrayPos(782, 248)], "West Virginia": [getArrayPos(818, 308)],
+        "Virginia": [getArrayPos(877, 316)], "North Carolina": [getArrayPos(862, 365)], "South Carolina": [getArrayPos(864, 423)],
+        "Georgia": [getArrayPos(820, 469)], "Florida": [getArrayPos(851, 566)], "Maryland": [getArrayPos(895, 260)],
+        "Deleware": [getArrayPos(929, 263)], "New Jersey": [getArrayPos(937, 235)], "Pennsylvania": [getArrayPos(851, 219)],
+        "Connecticut": [getArrayPos(964, 181)], "Rhode Island": [getArrayPos(983, 174)], "Massachusetts": [getArrayPos(967, 156)],
+        "Vermont": [getArrayPos(946, 109)], "New Hampshire": [getArrayPos(970, 127)], "Maine": [getArrayPos(996, 82)]};
+
+        let checkSameColor = function(p, data, red, green, blue, alpha) {
+            return (data[p] == red) && (data[p + 1] == green) && (data[p + 2] == blue) && (data[p + 3] == alpha);
+        }
+
+        let allStateLocs = {};
+        for (let s in states) {
+            //console.log(s);
+            allStateLocs[s] = new Set();
+        }
+
+
+        let goUp = function(loc) {
+            let ret = ((loc / 4) - width);
+            if (ret < 0) {
+                return -1;
+            }
+            return ret * 4;
+        };
+        let goDown = function(loc) {
+            let ret = ((loc / 4) + width);
+            if (ret >= (height * width)) {
+                return -1;
+            }
+            return ret * 4;
+        };
+        let goLeft = function(loc) {
+            if (((loc / 4) % width) == 0) {
+                return -1;
+            }
+            return ((loc / 4) - 1) * 4;
+        };
+        let goRight = function(loc) {
+            if ((((loc / 4) + 1) % width) == 0) {
+                return -1;
+            }
+            return ((loc / 4) + 1) * 4;
+        };
+
+
+        let fill = function(cursor, newColor, imgData, stateName) {
+            //console.log(stateName);
+            let stateSet = allStateLocs[stateName];
+            allStateLocs[stateName] = stateSet;
+
+
+            let pointsToProcess = [cursor];
+            let red = imgData.data[cursor];
+            let green = imgData.data[cursor + 1];
+            let blue = imgData.data[cursor + 2];
+            let alpha = imgData.data[cursor + 3];
+            //console.log("Cursor reads: ");
+            //console.log([red, green, blue, alpha]);
+
+            if ((red == newColor[0]) && (green == newColor[1]) && (blue == newColor[2]) && (alpha == newColor[3])) {
+                //console.log("first early return");
+                return imgData;
+            }
+            if ((red == 0) && (green == 0) && (blue == 0)) {
+                //console.log("second early return");
+                return imgData;
+            }
+
+            while (pointsToProcess.length > 0){
+                let c = pointsToProcess.pop();
+                stateSet.add(c);
+
+                imgData.data[c] = newColor[0];
+                imgData.data[c + 1] = newColor[1];
+                imgData.data[c + 2] = newColor[2];
+                imgData.data[c + 3] = newColor[3];
+
+                let left = goLeft(c);
+                let right = goRight(c);
+                let up = goUp(c);
+                let down = goDown(c);
+                if (checkSameColor(up, imgData.data, red, green, blue, alpha) && (up != -1)) {
+                    pointsToProcess.push(up);
+                }
+                if (checkSameColor(right, imgData.data, red, green, blue, alpha) && (right != -1)) {
+                    pointsToProcess.push(right);
+                }
+                if (checkSameColor(left, imgData.data, red, green, blue, alpha) && (left != -1)) {
+                    pointsToProcess.push(left);
+                }
+                if (checkSameColor(down, imgData.data, red, green, blue, alpha) && (down != -1)) {
+                    pointsToProcess.push(down);
+                }
+            }
+            allStateLocs[stateName] = stateSet;
+            return imgData;
+        }
+        let ret = imgDataW;
+        let satMin = 1;
+        let satMax = 255;
+
+        freqs = []
+        for (let f in states) {
+            freqs.push(states[f]["value"]);
+        }
+        let freqMin = getMin(freqs);
+        //console.log("freqMin: " + freqMin);
+        let freqMax = getMax(freqs);
+        //console.log("freqMax: " + freqMax);
+        //console.log(states);
+        //console.log(allStateLocs);
+        for (let state in states) {
+            //console.log(state);
+            //console.log(states[state]["value"]);
+            //console.log("Calling for " + state);
+            //console.log(states[state]);
+            let nc = [255, 0, 0, number_map(states[state]["value"], freqMin, freqMax, satMin, satMax) | 0];
+            //console.log(nc);
+            for (let l in locs[state]) {
+                ret = fill(locs[state][l], nc, ret, state);
+            }
+        }
+        //console.log(allStateLocs);
+
+        return [ret, allStateLocs];
+
+    }
+    self.onmessage = (e) => {
+        myData = e.data;
+        console.log("entering worker");
+        //console.log(myData);
+        let i = fillWrapper(myData["point"], myData["newColor"], myData["imageData"], myData["dimensions"], myData["states"]);
+        console.log("leaving worker");
+        self.postMessage(i);
+    };
+    `
+    let getArrayPos = function(first, second) {
+        return ((second * width) + first) * 4;
+    };
+
+    let colorToWrite = [255, 0, 0, 45];
+    let dimensions = [width, height];
+    function getCursorPosition(canvas, event) {
+        let rect = canvas.getBoundingClientRect();
+        let x = Math.floor(event.clientX - rect.left);
+        let y = Math.floor(event.clientY - rect.top);
+        console.log(x + ", " + y);
+        //pivot = getArrayPos(x, y);
+        let pos = Math.floor(getArrayPos(x, y));
+        let stateName = null;
+        console.log("Position: " + pos);
+        //console.log("looking through allStateLocs");
+		console.log(allStateLocs);
+        for (let a in allStateLocs) {
+            console.log("A is " + a);
+            if (allStateLocs[a].has(pos)) {
+					console.log("in if statement!!")
+                    stateName = a;
+            }
+        }
+        //console.log("stateName");
+        //console.log(stateName);
+		console.log("State name: " + stateName);
+        if (stateName != null) {
+			console.log("in if statename condition");
+            let cardHTML = `<div class="card" style="width: 18rem;">
+            <img src="/khecht/paradigms/icons/svg/x.svg" class="closeCardButton" style="position: absolute; right: 9px; top: 8px; width: 12px; height: 12px;">
+             <h5 class="card-header">` + stateName + ` </h5>
+            <div class="card-body" style="padding-bottom: 0">
+            <h5 class="card-title">` + states[stateName]["value"] + ` total articles </h5>
+            <!--<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>-->`;
+
+            for (let stateLink in stateLinks) {
+                if (stateLink == stateName) {
+                    cardHTML += "<ul>";
+                    for (let sL in stateLinks[stateLink]) {
+                        cardHTML += "<li><a href=\"";
+                        cardHTML += stateLinks[stateLink][sL];
+                        cardHTML += "\" target=\"_blank\">";
+                        cardHTML += extractRootDomain(stateLinks[stateLink][sL]);
+                        cardHTML += "</a></li>";
+                    }
+                    cardHTML += "</ul>";
+                }
+            }
+            /*<!--<ul>
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+                <li><a href="#">Link 3</a></li>
+                <li><a href="#">Link 4</a></li>
+                <li><a href="#">Link 5</a></li>
+            </ul>-->*/
+
+            cardHTML += `<!--<a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>-->
+            </div>`;
+
+            let div = $('<div class="stateInfoCard" style="position: absolute; z-index: 2;">')
+            .css({
+                "left": event.pageX + 'px',
+                "top": event.pageY + 'px'
+            })
+            .append($(cardHTML))
+            .appendTo(document.body);
+        }
+
+
+        //makeWorkerFill(pos, colorToWrite);
+        //colorToWrite[3] += 10;
+        //if (colorToWrite[3] > 255) {
+        //    colorToWrite[3] = 50;
+        //}
+    }
+    c.onmouseup = function(e){
+        $(".stateInfoCard").remove();
+        getCursorPosition(c, e);
+    }
+
+    let goButton = document.getElementById("goButton");
+    goButton.onclick = function() {
+        $(".stateInfoCard").remove();
+        checkDate(document.getElementById("dateInput").value); // checks user entered date to ensure time frame
+        stateRequest();
+        document.getElementById("userQuery").innerHTML = "Your search: " + document.getElementById("keywordInput").value
+        //makeWorkerFill(0, colorToWrite);
+    }
+
+    $("#keywordInput").click(function() {
+        $(".stateInfoCard").remove();
+    });
+    let states = {};
+    let makeWorkerFill = function(point, newColor) {
+        const blob = new Blob([workerScript], {type: 'application/javascript'});
+        const url = URL.createObjectURL(blob);
+        const worker = new Worker(url);
+
+        worker.onmessage = (e) => {
+            const imageData = e.data[0];
+            ctx.putImageData(imageData, 0, 0);
+            //console.log("Look at me!");
+            if (allStateLocs == null) {
+                allStateLocs = e.data[1];
+            }
+            //allStateLocs = e.data[1];
+            worker.terminate();
+        };
+        //let states = {};
+        //let freqCount = 0;
+        //for (let s in stateNames) {
+        //     //console.log("s" + s);
+        //     states[stateNames[s]] = Math.floor(Math.random() * 100);
+        //     //states[stateNames[s]] = freqCount;
+        //     //freqCount++;
+        //}
+        //console.log(states);
+        //console.log("about to show states");
+        //console.log(states);
+        const imageData = ctx.getImageData(0, 0, width, height);
+        worker.postMessage({point, newColor, imageData, dimensions, states});
+    };
+
+    let getMax = function(arr) {
+        let max = arr[0]
+        for (let i = 1; i < arr.length; i++) {
+            if (arr[i] > max) {
+                max = arr[i]
+            }
+        }
+        return max;
+    }
+
+    let getMin = function(arr) {
+        let min = arr[0]
+        for (let i = 1; i < arr.length; i++) {
+            if (arr[i] < min) {
+                min = arr[i]
+            }
+        }
+        return min;
+    }
+    let checkDate = function(mdate){
+        let cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - 14);
+        let currDate = new Date();
+        let mdatesplit = mdate.split('-');
+        let userDate = new Date(mdatesplit[0], mdatesplit[1] - 1, mdatesplit[2], 0, 0, 0, 0);
+        console.log("Cut off Date" + cutoffDate);
+        console.log("current date" + currDate);
+        console.log("user entered date" + userDate);
+
+        if (userDate > currDate || userDate < cutoffDate) {
+            document.getElementById("errorLog").innerHTML = "Error: Please enter a date from the last two weeks.";
+        } else{
+            document.getElementById("errorLog").innerHTML = "";
+        }
+    }
+
+
+    //let s = {"California": 10, "New York": 20};
+    //let locs = {"California": getArrayPos(90, 337), "New York": getArrayPos(916, 173)};
+
+
+    let fillStates = function(states) {
+        let frequencies = []
+        for (let state in states) {
+            frequencies.push(states[state]);
+        }
+        //console.log(frequencies);
+        let nc = [255, 0, 0, 255];
+        for (let state in states) {
+            //console.log("Calling for " + state);
+            makeWorkerFill(locs[state], nc);
+            //console.log(getMin(frequencies));
+            //console.log(getMax(frequencies));
+        }
+    }
+    //fillStates(s);
+
+    document.getElementById('keywordInput').onkeypress = function(e){
+        if (!e) e = window.event;
+        var keyCode = e.keyCode || e.which;
+        if (keyCode == '13'){
+            // Enter pressed
+            $("#goButton").click();
+            return false;
+        }
+    }
+
+    $('body').on('click', '.closeCardButton', function() {
+        $(".stateInfoCard").remove();
+    });
+
+    // $(function(){
+    //     $(document).click(function(e){
+    // 			var div = $('<div style="position: absolute;">')
+    // 			.css({
+    // 				"left": e.pageX + 'px',
+    // 				"top": e.pageY + 'px'
+    // 			})
+    // 			.append($('<h1>Hi</h1>'))
+    // 			.appendTo(document.body);
+    //     }
+    //   );
+    // });
+
+
+    let gradC = document.getElementById("gradientCanvas");
+    let gradCtx = gradC.getContext("2d");
+
+    let grd = gradCtx.createLinearGradient(0, 0, gradC.width, 0);
+    grd.addColorStop(0, 'rgba(255, 255, 255, 255)');
+    grd.addColorStop(1, 'rgba(255, 0, 0, 255)');
+
+    gradCtx.fillStyle = grd;
+    gradCtx.fillRect(0, 0, gradC.width, gradC.height);
+    </script>
+
+    <script>
+    stateRequest = function() {
+        // if (document.getElementById("keywordInput").value == "") {
+        //     return;
+        // }
+        document.getElementById("loadingDiv").innerHTML = `
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4 text-center">
+                <div class="alert alert-success text-center" style="padding-bottom: 5px;" role="alert">
+                    <h4 class="alert-heading" style="padding-bottom: 0;">Loading</h4>
+                    <img src="source.gif" style="width:50px; height:50px;">
+                </div>
+            </div>
+            <div class="col-lg-4"></div>
+
+        </div>`;
+
+
+        var xhr = new XMLHttpRequest()
+        //"API" "USER" "BOTH"
+        let keywordsInUrl = document.getElementById("keywordInput").value.split(', ').join('||'); // split keywords based on commas to retrieve multiple
+        let previousInUrl = document.getElementById("previousInput").value;
+        let mode = document.getElementById("modeInput").value;
+        let dateInUrl = document.getElementById("dateInput").value;
+
+        if (mode == "News Sites") {
+            modeInUrl = "API";
+        }
+        else if (mode == "Uploaded Content") {
+            modeInUrl = "USER";
+        }
+        else if (mode == "Both") {
+            modeInUrl = "BOTH";
+        }
+        console.log("MODE: " + modeInUrl);
+
+        let keywordURL = "http://student04.cse.nd.edu:52071/stateInfo/" + keywordsInUrl + "/" + modeInUrl + "/" + dateInUrl + "/" + previousInUrl;
+        console.log(keywordURL);
+        xhr.open("GET", keywordURL, true);
+
+        xhr.onload = function(e) {
+            //console.log(xhr.responseText);
+
+            allLinksForCall = [];
+            allStatesForCall = [];
+            allDatesForCall = []
+
+
+            console.log("Response");
+            console.log(xhr.response);
+            let resp = JSON.parse(xhr.response);
+            //console.log(resp);
+            let d;
+            for (let st in resp["dates"]) {
+                //console.log(resp["dates"][st]);
+                states = resp["dates"][st];
+
+                allDatesForCall.push(st);
+                //console.log(st);
+                //d = st;
+                for (let st2 in states) {
+                    //console.log("HERE");
+                    stateLinks[st2] = states[st2]["links"];
+                }
+
+                allStatesForCall.push(states);
+                allLinksForCall.push(stateLinks);
+                states = {};
+                stateLinks = {}
+                //document.getElementById("loadingDiv").innerHTML = ``;
+            }
+            allStatesForCall = allStatesForCall.reverse();
+            allLinksForCall = allLinksForCall.reverse();
+            allDatesForCall = allDatesForCall.reverse();
+
+            if (allStatesForCall.length > 1) {
+                document.getElementById("dateForm").hidden = false;
+            }
+            else {
+                document.getElementById("dateForm").hidden = true;
+            }
+
+
+            states = allStatesForCall[0];
+            stateLinks = allLinksForCall[0];
+            date = allDatesForCall[0];
+
+            document.getElementById("dateSliderDisplay").innerHTML = date;
+
+
+            document.getElementById("dateSlider").max = (allStatesForCall.length - 1);
+
+            console.log(allStatesForCall);
+            //updateSliderDisplay(d);
+            makeWorkerFill(0, colorToWrite);
+            document.getElementById("loadingDiv").innerHTML = ``;
+        }
+
+        xhr.onerror = function(e) {
+            console.error(xhr.statusText);
+        }
+        xhr.send(null)
+    };
+
+    </script>
+
+
+    <script>
+
+
+        updateSliderDisplay = function() {
+            //console.log("in function");
+            let sVal = parseInt(document.getElementById("dateSlider").value);
+
+            if (allStatesForCall.length > 0) {
+                states = allStatesForCall[sVal];
+                stateLinks = allLinksForCall[sVal];
+                date = allDatesForCall[sVal];
+
+                document.getElementById("dateSliderDisplay").innerHTML = date;
+
+                makeWorkerFill(0, colorToWrite);
+            }
+
+            //document.getElementById("dateSliderDisplay").innerHTML = date;
+
+        };
+
+        console.log("Here");
+        $("#dateSlider").on("change", updateSliderDisplay);
+        //$(document).ready(updateSliderDisplay);
+
+
+        $(document).ready(function() {
+            let today = new Date();
+            let dd = today.getDate();
+            let mm = today.getMonth()+1; //January is 0!
+            let yyyy = today.getFullYear();
+
+            if(dd<10) {
+                dd = '0'+dd
+            }
+
+            if(mm<10) {
+                mm = '0'+mm
+            }
+
+            today = yyyy + '-' + mm + '-' + dd;
+            //document.write(today);
+            document.getElementById("dateInput").value = today;
+        });
+    </script>
+
+</body>
+</html>

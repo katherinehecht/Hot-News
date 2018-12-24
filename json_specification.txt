@@ -1,0 +1,35 @@
+| Command | Resource                  | Input Example                              | Output Example                                              |
+|---------|---------------------------|--------------------------------------------|-------------------------------------------------------------|
+| GET     | /userArticles/:title      |                                            | {“result”: “success”, “title” : “myTitle”,                  |
+|         |                           |                                            | “source”: “mySource”, “keywords”: [“keyword1”, “keyword2”]  |
+|         |                           |                                            | “content” : “myContent”}                                    |
+|         |                           |                                            |                                                             |
+| GET     | /userArticles             |                                            | {“result”: “success”, [“title” : “myTitle”,                 |
+|         |                           |                                            | “source”: “mySource”, “keywords”: [“keyword1”, “keyword2”]  |
+|         |                           |                                            | “content” : “myContent”], [“title” : “myTitle2”,            |
+|         |                           |                                            | “source”: “mySource2”, “keywords”: [“keyword3”, “keyword4”] |
+|         |                           |                                            | “content” : “myContents”]}                                  |
+|         |                           |                                            |                                                             |
+| GET     | /stateInfo/:keyword/:type |                                            | {“result”: “success”, “states”: [ “Alabama”:                |
+|         |                           |                                            | {“frequency”: 5, “links”: [“link1”, “link2”, “link3”]},     |
+|         |                           |                                            | “Arkansas”:  {“frequency”: 3,                               |
+|         |                           |                                            | “links”: [“link4”, “link5”, “link6”]}}                      |
+|         |                           |                                            |                                                             |
+| PUT     | /userArticles/:title      | {“source”: “mySource”,                     | {“result”: “success”}                                       |
+|         |                           | “keywords”: [“keyword1”, “keyword2”],      |                                                             |
+|         |                           | “content”: “myContent”, “link”: “myLink”,  |                                                             |
+|         |                           | “date”: “myDate”}                          |                                                             |
+|         |                           |                                            |                                                             |
+| POST    | /userArticles/            | {“articles” :[{“title”: “myTitle1”,        | {“result”: “success”}                                       |
+|         |                           | “source”: “mySource1”,                     |                                                             |
+|         |                           | “keywords”: [“keyword1”, “keyword2”],      |                                                             |
+|         |                           | “content”: “myContent1”, “link”: “myLink”, |                                                             |
+|         |                           | “date”: “myDate”}, {“title”: “myTitle2”,   |                                                             |
+|         |                           | “source”: “mySource2”,                     |                                                             |
+|         |                           | “keywords”: [“keyword3”, “keyword4”],      |                                                             |
+|         |                           | “content”: “myContent2”,                   |                                                             |
+|         |                           | “link”: “myLink”, “date”: “myDate”}]}      |                                                             |
+|         |                           |                                            |                                                             |
+| DELETE  | /userArticles/:title      |                                            | {“result”: “success”}                                       |
+|         |                           |                                            |                                                             |
+| DELETE  | /userArticles/            |                                            | {“result”: “success”}                                       |
